@@ -18,13 +18,26 @@ export async function getClosestRegion() {
         (position) => {
           const locationsWithDistance = LOCATIONS.map((l) => ({
             ...l,
-            distance: getDistance(position.coords, l.coords),
+            distance: getDistance(
+              {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              },
+              l.coords
+            ),
           }));
 
           const nearestLocation = locationsWithDistance.reduce((acc, l) =>
             acc.distance < l.distance ? acc : l
           );
 
+          console.log(
+            `Your coordinates are: ${position.coords.latitude}, ${
+              position.coords.longitude
+            }. The closest location is ${
+              nearestLocation.name
+            }, which is ${Math.round(nearestLocation.distance / 1000)}km away.`
+          );
           resolve(nearestLocation.name);
         },
 
